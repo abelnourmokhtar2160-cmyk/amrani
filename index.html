@@ -1,0 +1,838 @@
+Aucun élément sélectionné 
+
+Aller au contenu
+Utiliser Gmail avec un lecteur d'écran
+Cette version du navigateur n'est plus compatible. Veuillez installer un navigateur compatible.
+in:sent 
+22 sur 60
+(aucun objet)
+
+ABDEKNOUR MOKHTAR <abelnour.mokhtar2160@gmail.com>
+Pièces jointes
+sam. 2 mai 23:18
+À mokhtar.amrani
+
+amrani
+ 2 pièces jointes
+  •  Analysé par Gmail
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcul des heures de prières</title>
+    <style>
+        @charset "UTF-8";
+
+        a:link    	{ color: #1C23AE; text-decoration: none }
+        a:visited 	{ color: #1C23AE; text-decoration: none }
+        a:active  	{ color: #1C23AE; text-decoration: none }
+        a:hover   	{ color: #1C23AE; font-weight: bold; text-decoration: none}
+
+        .tb 	{
+            color: #202020;
+            font-size: 10px;
+            font-family: Arial, Helvetica, sans-serif;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tb td, .tb th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .tb tr:nth-child(even){background-color: #f2f2f2;}
+
+        .tb tr:hover {background-color: #ddd;}
+
+        .tb th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #3399FF;
+            color: white;
+       }
+
+        .ct2	{ 
+            font-size: 13px; 
+            font-family: Arial, verdana, "MS Sans Serif";
+            color: #FFFFFF;
+            padding-left: 6px;
+            text-align:justify;
+        }
+
+        .ct3	{ 
+            padding-top: 3px;
+            padding-bottom: 2px;
+            font-size: 11px; 
+            font-family: Arial, verdana, "MS Sans Serif";
+            color: #202020;
+            padding-left: 6px;
+            text-align:left;
+        }
+        
+        .ct4	{ 
+            font-size: 13px; 
+            font-family: Arial, verdana, "MS Sans Serif";
+            color: #FFFFFF;
+            background-color: #dddddd;
+            padding-left: 6px;
+            text-align:center;
+        }
+        
+        .ct5	{ 
+            font-size: 13px; 
+            font-family: Arial, verdana, "MS Sans Serif";
+            color: #FFFFFF;
+            background-color: #dddddd;
+            padding-left: 6px;
+            text-align:left;
+        }
+
+        body {
+            font-size: 10pt;
+            font-family: Verdana, "MS Sans Serif", Arial, Helvetica;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        
+        h1, h2, h3, h4 {
+            color: #333;
+        }
+        
+        select, input {
+            padding: 5px;
+            margin: 5px 0;
+        }
+        
+        .prayer-time {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        
+        .prayer-time span {
+            font-weight: bold;
+            color: #1C23AE;
+        }
+        
+        hr {
+            margin: 20px 0;
+            border: 0;
+            border-top: 1px solid #eee;
+        }
+        
+        .date-control {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f0f8ff;
+            border-radius: 5px;
+        }
+        
+        .date-control label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h4>Calcul des heures de prières</h4>
+    
+    <form id="formselect" name="formselect">
+        Ville : 
+        <select id="villeselect" name="villeselect" style="background-color: #f2f2f2">
+            <!-- Les options seront ajoutées par JavaScript -->
+        </select>
+	    <label for="datepicker">Choisir une date :</label>
+        <input type="date" id="datepicker" name="datepicker">
+        <button type="button" onclick="resetToToday()">Aujourd'hui</button>
+        </form>
+    <!-- <div class="date-control">
+        <label for="datepicker">Choisir une date :</label>
+        <input type="date" id="datepicker" name="datepicker">
+        <button type="button" onclick="resetToToday()">Aujourd'hui</button> -->
+       
+    <hr>
+    
+    <div class="prayer-time">
+        <b>Salat Time :</b><br>
+        <span id="lblCountryTown">Sélectionnez une ville</span><br>
+        <span id="lblDay">?</span>
+        <span id="lblDate">?</span><br>
+        Fajr: <span id="lblFajr">?</span><br>
+        Chourouk: <span id="lblChourouk">?</span><br>
+        Zuhr: <span id="lblZhur">?</span><br>
+        Asr: <span id="lblAsr">?</span><br>
+        Maghrib: <span id="lblMaghrib">?</span><br>
+        Isha: <span id="lblIsha">?</span><br>
+    </div>
+    
+    <hr>
+    
+    <div>
+        Calendrier de prière du mois de : <b><span id="lblmensuel">?</span></b><br>
+        
+        <table id='points_table' >
+            <thead>
+                <tr>
+                    <th>Jour</th>
+                    <th>Date</th>
+                    <th>Fajr</th>
+                    <th>Chourouk</th>
+                    <th>Zuhr</th>
+                    <th>Asr</th>
+                    <th>Maghrib</th>
+                    <th>Isha</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Les lignes seront ajoutées par JavaScript -->
+            </tbody>
+        </table>
+    </div>
+    
+    <hr>
+
+   <script>
+        // Constantes et définitions
+        const idFajr = 0;
+        const idChourouk = 1;
+        const idZuhr = 2;
+        const idAsr = 3;
+        const idMaghrib = 4;
+        const idIsha = 5;
+        
+        const NConvention = 9;
+        const deg2rd = Math.PI / 180.0;
+        const rd2deg = 180.0 / Math.PI;
+        const SolarSiderealCorrection = 1.002738;
+        
+        // Données des villes algériennes
+        const NTowns = 56;
+        
+        function TownData(nom, lat, lon) {
+            this.TownName = nom;
+            this.latitude = lat;
+            this.longitude = lon;
+        }
+        
+        const Towns = [
+            new TownData("Adrar", 27.870100, -0.289500),
+            new TownData("Aïn Defla", 36.265200, 1.970300),
+            new TownData("Aïn Témouchent", 35.289100, -1.142500),
+            new TownData("Aïn-Beida-Ouargla", 31.932600, 5.404300),
+            new TownData("Aïn-Defla", 36.265200, 1.970300),
+            new TownData("Aïn-El-Beïda", 31.917200, 5.412780),
+            new TownData("Aïn-Témouchent", 35.289100, -1.142500),
+            new TownData("Alger", 36.775500, 3.059700),
+            new TownData("Annaba", 36.900700, 7.757100),
+            new TownData("Batna", 35.553000, 6.178900),
+            new TownData("Béchar", 31.617900, -2.214900),
+            new TownData("Béjaïa", 36.756300, 5.074100),
+            new TownData("Biskra", 34.855600, 5.728100),
+            new TownData("Blida", 36.472900, 2.825100),
+            new TownData("Bordj-Bou-Arreridj", 36.059100, 4.630320),
+            new TownData("Bouira", 36.374300, 3.884100),
+            new TownData("Chlef", 36.165100, 1.327000),
+            new TownData("Constantine", 36.362900, 6.608700),
+            new TownData("Djelfa", 34.675700, 3.252000),
+            new TownData("El Bayadh", 33.693500, 1.015340),
+            new TownData("El Biod", 33.765323, -0.131261),
+            new TownData("El-Golea", 30.565800, 2.865200),
+            new TownData("El-Oued", 33.368300, 6.867370),
+            new TownData("Es-Sénia", 35.620100, -0.606200),
+            new TownData("Ghardaïa", 32.493700, 3.672300),
+            new TownData("Guelma", 36.470300, 7.435500),
+            new TownData("Illizi", 26.482100, 8.478500),
+            new TownData("Jijel", 36.824400, 5.767600),
+            new TownData("Khenchela", 35.431400, 7.144200),
+            new TownData("Khenchla", 35.431400, 7.144200),
+            new TownData("Laghouat", 33.810000, 2.865800),
+            new TownData("M'Sila", 35.702000, 4.547100),
+            new TownData("Mascara", 35.395200, 0.136700),
+			new TownData("Oued Taria", 35.115000, 0.085050),
+            new TownData("Medea", 36.263000, 2.758200),
+            new TownData("Mila", 36.449000, 6.262500),
+            new TownData("Mostaganem", 35.933600, 0.086800),
+            new TownData("Naâma", 33.263100, -0.313800),
+            new TownData("Oran", 35.697700, -0.635000),
+            new TownData("Ouargla", 31.945700, 5.325400),
+            new TownData("Oum El-Bouaghi", 35.876900, 7.114800),
+            new TownData("Oum-El-Bouaghi", 35.876900, 7.114800),
+            new TownData("Relizane", 35.743800, 0.558300),
+            new TownData("Saïda", 34.830400, 0.151800),
+			new TownData("Sidi Boubkeur", 35.038820, 0.059150),
+            new TownData("Sétif", 36.188600, 5.407200),
+            new TownData("Sidi-Bel-Abbès", 35.21546, -0.62990),
+            new TownData("Skikda", 36.879000, 6.905200),
+            new TownData("Souk-Ahras", 36.281200, 7.963800),
+            new TownData("Taher", 36.799000, 5.882000),
+            new TownData("Tamanrasset", 22.787100, 5.520200),
+            new TownData("Tebessa", 35.409000, 8.121000),
+            new TownData("Tiaret", 35.372000, 1.320200),
+            new TownData("Tindouf", 27.683100, -8.157200),
+            new TownData("Tipaza", 36.544800, 2.263040),
+            new TownData("Tissemsilt", 35.608700, 1.812400),
+            new TownData("Tizi-Ouzou", 36.712200, 4.047900),
+            new TownData("Tlemcen", 34.879200, -1.315300)
+        ];
+        
+        // Configuration des conventions de calcul
+        const SalatTimeConfig = [];
+        
+        class SalatTimeStruct {
+            constructor() {
+                this.Fajr = 0;
+                this.Chourouk = 0;
+                this.Zuhr = 0;
+                this.Asr = 0;
+                this.Maghrib = 0;
+                this.Isha = 0;
+            }
+        }
+        
+        class SalatTimeConfigStruct {
+            constructor() {
+                this.name = "";
+                this.SalatTimeAdjust = new SalatTimeStruct();
+                this.FajrTwilightAngle = 0;
+                this.IshaTwilightAngle = 0;
+                this.Sunrise_setAngle = 0;
+                this.AsrShafi = 0;
+                this.Isha_is_Maghrib_plus = 0;
+                this.Isha_is_Maghrib_plus_min = 0;
+                this.ZuhrFixe = 0;
+                this.ZuhrFixeHour = 0;
+            }
+        }
+        
+        // Initialisation des configurations
+        function ReadConventions() {
+            for (let i = 0; i < NConvention; i++) {
+                SalatTimeConfig[i] = new SalatTimeConfigStruct();
+            }
+            
+            // Convention 0: France UOIF
+            SalatTimeConfig[0].name = "France : UOIF";
+            SalatTimeConfig[0].AsrShafi = 1;
+            SalatTimeConfig[0].FajrTwilightAngle = 12;
+            SalatTimeConfig[0].IshaTwilightAngle = 12;
+            SalatTimeConfig[0].Sunrise_setAngle = 0.61;
+            SalatTimeConfig[0].Isha_is_Maghrib_plus = 0;
+            SalatTimeConfig[0].Isha_is_Maghrib_plus_min = 0;
+            SalatTimeConfig[0].ZuhrFixe = 0;
+            SalatTimeConfig[0].ZuhrFixeHour = 0;
+            SalatTimeConfig[0].SalatTimeAdjust.Fajr = -5;
+            SalatTimeConfig[0].SalatTimeAdjust.Chourouk = 0;
+            SalatTimeConfig[0].SalatTimeAdjust.Zuhr = 5;
+            SalatTimeConfig[0].SalatTimeAdjust.Asr = 0;
+            SalatTimeConfig[0].SalatTimeAdjust.Maghrib = 5;
+            SalatTimeConfig[0].SalatTimeAdjust.Isha = 5;
+            
+            // Convention 1: Algérie (Isha 17°)
+            SalatTimeConfig[1].name = "Algérie : (Isha 17°)";
+            SalatTimeConfig[1].AsrShafi = 1;
+            SalatTimeConfig[1].FajrTwilightAngle = 18;
+            SalatTimeConfig[1].IshaTwilightAngle = 17;
+            SalatTimeConfig[1].Sunrise_setAngle = 0.61;
+            SalatTimeConfig[1].Isha_is_Maghrib_plus = 0;
+            SalatTimeConfig[1].Isha_is_Maghrib_plus_min = 0;
+            SalatTimeConfig[1].ZuhrFixe = 0;
+            SalatTimeConfig[1].ZuhrFixeHour = 13.3333334;
+            SalatTimeConfig[1].SalatTimeAdjust.Fajr = 0;
+            SalatTimeConfig[1].SalatTimeAdjust.Chourouk = 0;
+            SalatTimeConfig[1].SalatTimeAdjust.Zuhr = 0;
+            SalatTimeConfig[1].SalatTimeAdjust.Asr = 0;
+            SalatTimeConfig[1].SalatTimeAdjust.Maghrib = 5;
+            SalatTimeConfig[1].SalatTimeAdjust.Isha = 0;
+            
+            // Convention 2: University of Islamic Sciences, Karachi
+            SalatTimeConfig[2].name = "University of Islamic Sciences, Karachi";
+            SalatTimeConfig[2].AsrShafi = 1;
+            SalatTimeConfig[2].FajrTwilightAngle = 18;
+            SalatTimeConfig[2].IshaTwilightAngle = 18;
+            SalatTimeConfig[2].Sunrise_setAngle = 0.61;
+            SalatTimeConfig[2].Isha_is_Maghrib_plus = 0;
+            SalatTimeConfig[2].Isha_is_Maghrib_plus_min = 0;
+            SalatTimeConfig[2].ZuhrFixe = 0;
+            SalatTimeConfig[2].ZuhrFixeHour = 0;
+            SalatTimeConfig[2].SalatTimeAdjust.Fajr = 0;
+            SalatTimeConfig[2].SalatTimeAdjust.Chourouk = 0;
+            SalatTimeConfig[2].SalatTimeAdjust.Zuhr = 0;
+            SalatTimeConfig[2].SalatTimeAdjust.Asr = 0;
+            SalatTimeConfig[2].SalatTimeAdjust.Maghrib = 5;
+            SalatTimeConfig[2].SalatTimeAdjust.Isha = 5;
+            
+            // Convention 3: Islamic Society of North America (ISNA)
+            SalatTimeConfig[3].name = "Islamic Society of North America (ISNA)";
+            SalatTimeConfig[3].AsrShafi = 1;
+            SalatTimeConfig[3].FajrTwilightAngle = 15;
+            SalatTimeConfig[3].IshaTwilightAngle = 15;
+            SalatTimeConfig[3].Sunrise_setAngle = 0.61;
+            SalatTimeConfig[3].Isha_is_Maghrib_plus = 0;
+            SalatTimeConfig[3].Isha_is_Maghrib_plus_min = 0;
+            SalatTimeConfig[3].ZuhrFixe = 0;
+            SalatTimeConfig[3].ZuhrFixeHour = 0;
+            SalatTimeConfig[3].SalatTimeAdjust.Fajr = 0;
+            SalatTimeConfig[3].SalatTimeAdjust.Chourouk = 0;
+            SalatTimeConfig[3].SalatTimeAdjust.Zuhr = 0;
+            SalatTimeConfig[3].SalatTimeAdjust.Asr = 0;
+            SalatTimeConfig[3].SalatTimeAdjust.Maghrib = 0;
+            SalatTimeConfig[3].SalatTimeAdjust.Isha = 5;
+            
+            // Convention 4: World Islamic League
+            SalatTimeConfig[4].name = "World Islamic League";
+            SalatTimeConfig[4].AsrShafi = 1;
+            SalatTimeConfig[4].FajrTwilightAngle = 18;
+            SalatTimeConfig[4].IshaTwilightAngle = 17;
+            SalatTimeConfig[4].Sunrise_setAngle = 0.61;
+            SalatTimeConfig[4].Isha_is_Maghrib_plus = 0;
+            SalatTimeConfig[4].Isha_is_Maghrib_plus_min = 0;
+            SalatTimeConfig[4].ZuhrFixe = 0;
+            SalatTimeConfig[4].ZuhrFixeHour = 0;
+            SalatTimeConfig[4].SalatTimeAdjust.Fajr = 0;
+            SalatTimeConfig[4].SalatTimeAdjust.Chourouk = 0;
+            SalatTimeConfig[4].SalatTimeAdjust.Zuhr = 0;
+            SalatTimeConfig[4].SalatTimeAdjust.Asr = 0;
+            SalatTimeConfig[4].SalatTimeAdjust.Maghrib = 5;
+            SalatTimeConfig[4].SalatTimeAdjust.Isha = 5;
+            
+            // Convention 5: Um Ul-Qura, Makkah
+            SalatTimeConfig[5].name = "Um Ul-Qura, Makkah";
+            SalatTimeConfig[5].AsrShafi = 1;
+            SalatTimeConfig[5].FajrTwilightAngle = 19;
+            SalatTimeConfig[5].IshaTwilightAngle = 19;
+            SalatTimeConfig[5].Sunrise_setAngle = 0.61;
+            SalatTimeConfig[5].Isha_is_Maghrib_plus = 1;
+            SalatTimeConfig[5].Isha_is_Maghrib_plus_min = 90;
+            SalatTimeConfig[5].ZuhrFixe = 0;
+            SalatTimeConfig[5].ZuhrFixeHour = 0;
+            SalatTimeConfig[5].SalatTimeAdjust.Fajr = -1;
+            SalatTimeConfig[5].SalatTimeAdjust.Chourouk = 0;
+            SalatTimeConfig[5].SalatTimeAdjust.Zuhr = 0;
+            SalatTimeConfig[5].SalatTimeAdjust.Asr = 0;
+            SalatTimeConfig[5].SalatTimeAdjust.Maghrib = 1;
+            SalatTimeConfig[5].SalatTimeAdjust.Isha = 0;
+            
+            // Convention 6: Egyptian General Organisation of Surveying
+            SalatTimeConfig[6].name = "Egyptian General Organisation of Surveying";
+            SalatTimeConfig[6].AsrShafi = 1;
+            SalatTimeConfig[6].FajrTwilightAngle = 19.5;
+            SalatTimeConfig[6].IshaTwilightAngle = 17.5;
+            SalatTimeConfig[6].Sunrise_setAngle = 0.61;
+            SalatTimeConfig[6].Isha_is_Maghrib_plus = 0;
+            SalatTimeConfig[6].Isha_is_Maghrib_plus_min = 0;
+            SalatTimeConfig[6].ZuhrFixe = 0;
+            SalatTimeConfig[6].ZuhrFixeHour = 0;
+            SalatTimeConfig[6].SalatTimeAdjust.Fajr = 0;
+            SalatTimeConfig[6].SalatTimeAdjust.Chourouk = 0;
+            SalatTimeConfig[6].SalatTimeAdjust.Zuhr = 0;
+            SalatTimeConfig[6].SalatTimeAdjust.Asr = 0;
+            SalatTimeConfig[6].SalatTimeAdjust.Maghrib = 0;
+            SalatTimeConfig[6].SalatTimeAdjust.Isha = 0;
+            
+            // Convention 7: User defined
+            SalatTimeConfig[7].name = "User defined";
+            SalatTimeConfig[7].AsrShafi = 1;
+            SalatTimeConfig[7].FajrTwilightAngle = 18;
+            SalatTimeConfig[7].IshaTwilightAngle = 17;
+            SalatTimeConfig[7].Sunrise_setAngle = 0.61;
+            SalatTimeConfig[7].Isha_is_Maghrib_plus = 0;
+            SalatTimeConfig[7].Isha_is_Maghrib_plus_min = 75;
+            SalatTimeConfig[7].ZuhrFixe = 0;
+            SalatTimeConfig[7].ZuhrFixeHour = 0;
+            SalatTimeConfig[7].SalatTimeAdjust.Fajr = -5;
+            SalatTimeConfig[7].SalatTimeAdjust.Chourouk = -5;
+            SalatTimeConfig[7].SalatTimeAdjust.Zuhr = 5;
+            SalatTimeConfig[7].SalatTimeAdjust.Asr = 0;
+            SalatTimeConfig[7].SalatTimeAdjust.Maghrib = 5;
+            SalatTimeConfig[7].SalatTimeAdjust.Isha = 0;
+            
+            // Convention 8: Maroc (18° et Isha 17°)
+            SalatTimeConfig[8].name = "Maroc : (18° et Isha 17°)";
+            SalatTimeConfig[8].AsrShafi = 1;
+            SalatTimeConfig[8].FajrTwilightAngle = 18;
+            SalatTimeConfig[8].IshaTwilightAngle = 17;
+            SalatTimeConfig[8].Sunrise_setAngle = 0.61;
+            SalatTimeConfig[8].Isha_is_Maghrib_plus = 0;
+            SalatTimeConfig[8].Isha_is_Maghrib_plus_min = 75;
+            SalatTimeConfig[8].ZuhrFixe = 0;
+            SalatTimeConfig[8].ZuhrFixeHour = 0;
+            SalatTimeConfig[8].SalatTimeAdjust.Fajr = -5;
+            SalatTimeConfig[8].SalatTimeAdjust.Chourouk = -5;
+            SalatTimeConfig[8].SalatTimeAdjust.Zuhr = 5;
+            SalatTimeConfig[8].SalatTimeAdjust.Asr = 0;
+            SalatTimeConfig[8].SalatTimeAdjust.Maghrib = 5;
+            SalatTimeConfig[8].SalatTimeAdjust.Isha = 0;
+        }
+        
+        // Variables globales
+        let Conventioninput = 1;
+        let Timezoneinput = 1;
+        let DSTinput = 0;
+        
+        const Mounths = [
+            "Janvier", "Février", "Mars", "Avril",
+            "Mai", "Juin", "Juillet", "Août",
+            "Septembre", "Octobre", "Novembre", "Décembre"
+        ];
+        
+        const Days = [
+             "Samedi","Dimanche","Lundi", "Mardi", "Mercredi","Jeudi", "Vendredi"
+        ];
+      
+     
+        
+        // Fonctions de calcul astronomique
+     	 function JulianDay(date, month, year, UT) {
+    if (month <=2) {
+        month =month+ 12;
+        year =year- 1;
+    }
+	let j=date
+    let m=month
+    let a = year % 100;
+    let century = Math.floor(year / 100);
+    
+    let h = (j + Math.floor((13 * (m + 1)) / 5) + a + Math.floor(a / 4) + Math.floor(century / 4) - (2 * century)) % 7;
+     return h;
+}
+   		
+        function JulianCentury(date, month, year, UT) {
+            if (month <= 2) {
+                month += 12;
+                year -= 1;
+            }
+            return (Math.floor(365.25 * year) + Math.floor(30.6001 * (month + 1)) - 15 + 1720996.5 + date + UT / 24.0 - 2451545.0) / 36525.0;
+        }
+        
+        function SoleilLongitude(T) {
+            const M = 357.52910 + 35999.05030 * T - 0.0001559 * T * T - 0.00000048 * T * T * T;
+            const L0 = 280.46645 + 36000.76983 * T + 0.0003032 * T * T;
+            const DL = (1.914600 - 0.004817 * T - 0.000014 * T * T) * Math.sin(deg2rd * M) +
+                      (0.019993 - 0.000101 * T) * Math.sin(deg2rd * 2 * M) + 0.000290 * Math.sin(deg2rd * 3 * M);
+            let L = L0 + DL;
+            let Lm = L - 360 * Math.floor(L / 360);
+            if (Lm < 0) Lm += 360;
+            return Lm * deg2rd;
+        }
+        
+        function eclipticL2RA_delta(T, L, RA, delta) {
+            const eps = deg2rd * (23.4393 - 0.013 * T);
+            const X = Math.cos(L);
+            const Y = Math.cos(eps) * Math.sin(L);
+            const Z = Math.sin(eps) * Math.sin(L);
+            const R = Math.sqrt(1.0 - Z * Z);
+            delta[0] = Math.atan2(Z, R);
+            RA[0] = 2 * Math.atan2(Y, X + R);
+        }
+        
+        function TempsSideral(T) {
+            let theta0 = 280.46061837 + 360.98564736629 * T * 36525 + 0.000387933 * T * T - T * T * T / 38710000.0;
+            let theta0m = theta0 - 360 * Math.floor(theta0 / 360);
+            if (theta0m < 0) theta0m += 360;
+            return theta0m * deg2rd;
+        }
+        
+        function equatorial2horizontal(beta, tau, delta, h, az) {
+            h[0] = Math.asin(Math.sin(beta) * Math.sin(delta) + Math.cos(beta) * Math.cos(delta) * Math.cos(tau));
+            az[0] = Math.atan2(-Math.sin(tau), Math.cos(beta) * Math.tan(delta) - Math.sin(beta) * Math.cos(tau)) - Math.PI;
+            if (az[0] < 0) az[0] += 2 * Math.PI;
+        }
+        
+        function rd2heure(angle) {
+            return angle * 12.0 / Math.PI;
+        }
+        
+        function heure2rd(heure) {
+            return heure * Math.PI / 12.0;
+        }
+        
+        function h2hmiarrondie(h) {
+            let hi = Math.floor(h);
+            let m = (h - hi) * 60;
+            let mi = Math.floor(m);
+            let s = (m - mi) * 60;
+            
+            if (s >= 30) {
+                mi++;
+                if (mi === 60) {
+                    mi = 0;
+                    hi++;
+                    if (hi === 24) hi = 0;
+                }
+            }
+            
+            return `${hi.toString().padStart(2, '0')}:${mi.toString().padStart(2, '0')}`;
+        }
+        
+        function CalculeNjdumois(m, annee) {
+            const Nonbissextile = Math.floor((annee - 4 * Math.floor(annee / 4) + 2) / 3);
+            if (m === 1 || m === 3 || m === 5 || m === 7 || m === 8 || m === 10 || m === 12) {
+                return 31;
+            } else {
+                if (m === 2) {
+                    return Nonbissextile ? 28 : 29;
+                } else {
+                    return 30;
+                }
+            }
+        }
+        
+        function CalculeJour(T) {
+            const jour = T * 36525 + 5;
+            return Math.floor(jour - 7 * Math.floor(jour / 7));
+        }
+        
+        function ComputeZuhrHour(date, longitude, TimeZone, SalatTime) {
+            const T = JulianCentury(date.j, date.m, date.a, 12);
+            const L = SoleilLongitude(T);
+            const RA = [0];
+            const delta = [0];
+            eclipticL2RA_delta(T, L, RA, delta);
+            const theta0 = TempsSideral(T);
+            const GMST0 = theta0 - heure2rd(12);
+            let Z_GMT = rd2heure(RA[0] - GMST0 - longitude);
+            
+            if (Z_GMT < 0) {
+                Z_GMT += 24;
+            }
+            
+            SalatTime.Zuhr = TimeZone + Z_GMT;
+            if (SalatTime.Zuhr < 0) SalatTime.Zuhr += 24;
+        }
+        
+        function ComputeTwilightHour(TypeSalat, date, longitude, latitude, TimeZone, SalatTime, SalatTimeConfig, Convention, SalatHour) {
+            let h = 0;
+            let Offset = 0;
+            
+            switch (TypeSalat) {
+                case idFajr:
+                    h = -SalatTimeConfig[Convention].FajrTwilightAngle * deg2rd;
+                    Offset = -1;
+                    break;
+                case idIsha:
+                    h = -SalatTimeConfig[Convention].IshaTwilightAngle * deg2rd;
+                    Offset = +1;
+                    break;
+                case idChourouk:
+                    h = -SalatTimeConfig[Convention].Sunrise_setAngle * deg2rd;
+                    Offset = -1;
+                    break;
+                case idMaghrib:
+                    h = -SalatTimeConfig[Convention].Sunrise_setAngle * deg2rd;
+                    Offset = +1;
+                    break;
+            }
+            
+            const T = JulianCentury(date.j, date.m, date.a, SalatTime.Zuhr - TimeZone);
+            const L = SoleilLongitude(T);
+            const RA = [0];
+            const delta = [0];
+            eclipticL2RA_delta(T, L, RA, delta);
+            
+            if (TypeSalat === idAsr) {
+                if (SalatTimeConfig[Convention].AsrShafi) {
+                    h = Math.atan(1.0 / (1.0 + Math.tan(latitude - delta[0])));
+                } else {
+                    h = Math.atan(1.0 / (2.0 + Math.tan(latitude - delta[0])));
+                }
+                Offset = +1;
+            }
+            
+            const costau = (Math.sin(h) - Math.sin(latitude) * Math.sin(delta[0])) / (Math.cos(latitude) * Math.cos(delta[0]));
+            
+            if (costau > 1.0 || costau < -1.0) {
+                return -1;
+            }
+            
+            if (costau >= -1.0 && costau <= 1.0) {
+                const tau = Math.acos(costau) / SolarSiderealCorrection;
+                SalatHour[0] = SalatTime.Zuhr + Offset * rd2heure(tau);
+            }
+            
+            return 0;
+        }
+        
+        function ComputeSalatTime(date, longitude, latitude, TimeZoneTown, DST, Convention, SalatTime, SalatTimeC) {
+            const DSTApplies = false; // Simplification pour cet exemple
+            const TimeZone = DSTApplies ? 1 + TimeZoneTown : TimeZoneTown;
+            
+            ComputeZuhrHour(date, longitude, TimeZone, SalatTime);
+            
+            // Calcul des heures de prière
+            const Fajr = [0];
+            ComputeTwilightHour(idFajr, date, longitude, latitude, TimeZone, SalatTime, SalatTimeConfig, Convention, Fajr);
+            SalatTime.Fajr = Fajr[0];
+            
+            const Chourouk = [0];
+            ComputeTwilightHour(idChourouk, date, longitude, latitude, TimeZone, SalatTime, SalatTimeConfig, Convention, Chourouk);
+            SalatTime.Chourouk = Chourouk[0];
+            
+            const Maghrib = [0];
+            ComputeTwilightHour(idMaghrib, date, longitude, latitude, TimeZone, SalatTime, SalatTimeConfig, Convention, Maghrib);
+            SalatTime.Maghrib = Maghrib[0];
+            
+            if (SalatTimeConfig[Convention].Isha_is_Maghrib_plus) {
+                SalatTime.Isha = SalatTime.Maghrib + SalatTimeConfig[Convention].Isha_is_Maghrib_plus_min / 60.0;
+            } else {
+                const Isha = [0];
+                ComputeTwilightHour(idIsha, date, longitude, latitude, TimeZone, SalatTime, SalatTimeConfig, Convention, Isha);
+                SalatTime.Isha = Isha[0];
+            }
+            
+            const Asr = [0];
+            ComputeTwilightHour(idAsr, date, longitude, latitude, TimeZone, SalatTime, SalatTimeConfig, Convention, Asr);
+            SalatTime.Asr = Asr[0];
+            
+            // Application des ajustements
+            SalatTimeC.Fajr = SalatTime.Fajr + SalatTimeConfig[Convention].SalatTimeAdjust.Fajr / 60.0;
+            SalatTimeC.Chourouk = SalatTime.Chourouk + SalatTimeConfig[Convention].SalatTimeAdjust.Chourouk / 60.0;
+            SalatTimeC.Zuhr = SalatTime.Zuhr + SalatTimeConfig[Convention].SalatTimeAdjust.Zuhr / 60.0;
+            SalatTimeC.Asr = SalatTime.Asr + SalatTimeConfig[Convention].SalatTimeAdjust.Asr / 60.0;
+            SalatTimeC.Maghrib = SalatTime.Maghrib + SalatTimeConfig[Convention].SalatTimeAdjust.Maghrib / 60.0;
+            SalatTimeC.Isha = SalatTime.Isha + SalatTimeConfig[Convention].SalatTimeAdjust.Isha / 60.0;
+            
+            // Correction des heures négatives ou > 24
+            if (SalatTimeC.Fajr < 0) SalatTimeC.Fajr += 24;
+            if (SalatTimeC.Chourouk < 0) SalatTimeC.Chourouk += 24;
+            if (SalatTimeC.Zuhr < 0) SalatTimeC.Zuhr += 24;
+            if (SalatTimeC.Asr < 0) SalatTimeC.Asr += 24;
+            if (SalatTimeC.Maghrib < 0) SalatTimeC.Maghrib += 24;
+            if (SalatTimeC.Isha < 0) SalatTimeC.Isha += 24;
+            
+            if (SalatTimeC.Fajr >= 24) SalatTimeC.Fajr -= 24;
+            if (SalatTimeC.Chourouk >= 24) SalatTimeC.Chourouk -= 24;
+            if (SalatTimeC.Zuhr >= 24) SalatTimeC.Zuhr -= 24;
+            if (SalatTimeC.Asr >= 24) SalatTimeC.Asr -= 24;
+            if (SalatTimeC.Maghrib >= 24) SalatTimeC.Maghrib -= 24;
+            if (SalatTimeC.Isha >= 24) SalatTimeC.Isha -= 24;
+        }
+        
+        // Fonctions d'affichage
+        function DisplaySalatTime(SalatTimeC) {
+            document.getElementById("lblFajr").textContent = h2hmiarrondie(SalatTimeC.Fajr);
+            document.getElementById("lblChourouk").textContent = h2hmiarrondie(SalatTimeC.Chourouk);
+            document.getElementById("lblZhur").textContent = h2hmiarrondie(SalatTimeC.Zuhr);
+            document.getElementById("lblAsr").textContent = h2hmiarrondie(SalatTimeC.Asr);
+            document.getElementById("lblMaghrib").textContent = h2hmiarrondie(SalatTimeC.Maghrib);
+            document.getElementById("lblIsha").textContent = h2hmiarrondie(SalatTimeC.Isha);
+        }
+        
+        function DisplayDate(date) {
+            const dayOfWeek = Days[JulianDay(date.j, date.m, date.a, 12)];
+            document.getElementById("lblDay").textContent = dayOfWeek;
+            document.getElementById("lblDate").textContent = `${date.j} ${Mounths[date.m-1]} ${date.a}`;
+        }
+        
+        function DisplayCalendar(townIndex, month, year) {
+            const tableBody = document.querySelector('#points_table tbody');
+            tableBody.innerHTML = '';
+            
+            const daysInMonth = CalculeNjdumois(month, year);
+            const town = Towns[townIndex];
+            
+            document.getElementById("lblmensuel").textContent = Mounths[month-1] + " " + year;
+            
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = { j: day, m: month, a: year };
+                const SalatTime = new SalatTimeStruct();
+                const SalatTimeC = new SalatTimeStruct();
+                
+                ComputeSalatTime(date, town.longitude * deg2rd, town.latitude * deg2rd, Timezoneinput, DSTinput, Conventioninput, SalatTime, SalatTimeC);
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${Days[JulianDay(day, month, year, 12)]}</td>
+                    <td>${day}</td>
+                    <td>${h2hmiarrondie(SalatTimeC.Fajr)}</td>
+                    <td>${h2hmiarrondie(SalatTimeC.Chourouk)}</td>
+                    <td>${h2hmiarrondie(SalatTimeC.Zuhr)}</td>
+                    <td>${h2hmiarrondie(SalatTimeC.Asr)}</td>
+                    <td>${h2hmiarrondie(SalatTimeC.Maghrib)}</td>
+                    <td>${h2hmiarrondie(SalatTimeC.Isha)}</td>
+                `;
+                tableBody.appendChild(row);
+            }
+        }
+        
+        function UpdateDisplay() {
+            const townSelect = document.getElementById("villeselect");
+            const townIndex = townSelect.selectedIndex;
+            const dateInput = document.getElementById("datepicker");
+           
+            if (townIndex >= 0) {
+                const town = Towns[townIndex];
+                document.getElementById("lblCountryTown").textContent = town.TownName+"    .........    Latitude :  "+town.latitude+"    Longitude:  "+town.longitude;
+                
+                // Utiliser la date sélectionnée ou la date d'aujourd'hui
+                let selectedDate;
+                if (dateInput.value) {
+                    const dateObj = new Date(dateInput.value);
+                    selectedDate = { 
+                        j: dateObj.getDate(), 
+                        m: dateObj.getMonth() + 1, 
+                        a: dateObj.getFullYear() 
+                    };
+                } else {
+                    const today = new Date();
+                    selectedDate = { 
+                        j: today.getDate(), 
+                        m: today.getMonth() + 1, 
+                        a: today.getFullYear() 
+                    };
+                    // Mettre à jour le champ date avec la date d'aujourd'hui
+                    dateInput.value = today.toISOString().split('T')[0];
+                }
+                
+                const SalatTime = new SalatTimeStruct();
+                const SalatTimeC = new SalatTimeStruct();
+                
+                ComputeSalatTime(selectedDate, town.longitude * deg2rd, town.latitude * deg2rd, Timezoneinput, DSTinput, Conventioninput, SalatTime, SalatTimeC);
+                
+                DisplaySalatTime(SalatTimeC);
+                DisplayDate(selectedDate);
+                DisplayCalendar(townIndex, selectedDate.m, selectedDate.a);
+            }
+        }
+        
+        function resetToToday() {
+            const today = new Date();
+            document.getElementById("datepicker").value = today.toISOString().split('T')[0];
+            UpdateDisplay();
+        }
+        
+        // Initialisation
+        function init() {
+            ReadConventions();
+            
+            // Remplir la liste des villes
+            const townSelect = document.getElementById("villeselect");
+            Towns.forEach((town, index) => {
+                const option = document.createElement("option");
+                option.value = index;
+                option.textContent = town.TownName;
+                townSelect.appendChild(option);
+            });
+            
+            // Initialiser le champ date avec la date d'aujourd'hui
+            const today = new Date();
+            document.getElementById("datepicker").value = today.toISOString().split('T')[0];
+            
+            // Ajouter les événements de changement
+            townSelect.addEventListener("change", UpdateDisplay);
+            document.getElementById("datepicker").addEventListener("change", UpdateDisplay);
+            
+            // Afficher les données initiales
+            UpdateDisplay();
+        }
+        
+        // Démarrer l'application
+        window.onload = init;
+    </script>
+</body>
+</html>
+nouveau8.html
+Affichage de nouveau8.html en cours...
